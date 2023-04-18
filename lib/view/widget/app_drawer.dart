@@ -34,9 +34,7 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.home),
             title: const Text('Home'),
-            onTap: () {
-              Navigator.of(context).pushReplacementNamed('/');
-            },
+            onTap: () {},
           ),
           const Divider(),
           ListTile(

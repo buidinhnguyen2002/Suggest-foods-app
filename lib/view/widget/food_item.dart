@@ -1,37 +1,39 @@
-import 'package:flutter/material.dart';
-import 'package:suggest_food_app/view/screens/edit_schedule_screen.dart';
+import 'dart:ffi';
 
-class ScheduleItem extends StatefulWidget {
-  String? id;
-  bool isChoose;
-  String? name;
-  DateTime? applyDate;
-  ScheduleItem(
-      {super.key, this.id, required this.isChoose, this.name, this.applyDate});
+import 'package:flutter/material.dart';
+
+class FoodItem extends StatefulWidget {
+  final void Function(String, bool) updateStatusItem;
+  const FoodItem({super.key, required this.updateStatusItem});
 
   @override
-  State<ScheduleItem> createState() => _ScheduleItemState();
+  State<FoodItem> createState() => _FoodItemState();
 }
 
-class _ScheduleItemState extends State<ScheduleItem> {
+class _FoodItemState extends State<FoodItem> {
+  bool isChoose = false;
   @override
   Widget build(BuildContext context) {
     return CheckboxListTile(
-      value: widget.isChoose,
-      onChanged: (value) => setState(() {
-        widget.isChoose = !widget.isChoose;
-      }),
+      value: isChoose,
+      onChanged: (value) {
+        setState(() {
+          isChoose = !isChoose;
+        });
+        widget.updateStatusItem('1', isChoose);
+      },
+      // widget.isChoose = !widget.isChoose
       activeColor: Theme.of(context).primaryColor,
       checkColor: Theme.of(context).accentColor,
       controlAffinity: ListTileControlAffinity.leading,
       title: Text(
-        widget.name!,
+        'Hello',
         style: const TextStyle(
           fontWeight: FontWeight.w500,
           fontSize: 18,
         ),
       ),
-      subtitle: Text(widget.applyDate.toString()),
+      subtitle: Text("alo"),
       contentPadding: const EdgeInsets.all(0),
       tristate: true,
       secondary: Container(
@@ -44,10 +46,7 @@ class _ScheduleItemState extends State<ScheduleItem> {
               style: IconButton.styleFrom(
                 padding: EdgeInsets.all(0),
               ),
-              onPressed: () {
-                Navigator.of(context).pushNamed(EditScheduleScreen.routeName,
-                    arguments: widget.id);
-              },
+              onPressed: () {},
               icon: Icon(
                 Icons.edit,
                 color: Theme.of(context).primaryColor,
