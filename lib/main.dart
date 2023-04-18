@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:suggest_food_app/controller/schedule_controller.dart';
 import 'package:suggest_food_app/provider/auth.dart';
 import 'package:suggest_food_app/provider/food_data.dart';
 import 'package:suggest_food_app/provider/schedule_data.dart';
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
             primaryColor: Colors.green,
             accentColor: Colors.white,
           ),
-          home: true ? HomeScreen() : AuthScreen(),
+          home: auth.isAuth ? HomeScreen() : AuthScreen(),
           routes: {
             HomeScreen.routeName: (context) => HomeScreen(),
             ManageScheduleScreen.routeName: (context) => ManageScheduleScreen(),

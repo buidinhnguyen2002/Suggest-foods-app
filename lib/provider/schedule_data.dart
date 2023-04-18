@@ -75,15 +75,22 @@ class ScheduleData with ChangeNotifier {
 
   Future<void> addProduct(Schedule schedule) async {
     final url =
-        'https://my-awesome-project-bb26c-default-rtdb.firebaseio.com/products.json?auth=$authToken';
+        'https://suggest-food-app-default-rtdb.firebaseio.com/schedules.json?auth=$authToken';
     try {
       final response = await http.post(
         Uri.parse(url),
+        // body: json.encode({
+        //   'title': schedule.title,
+        //   'description': schedule.applyDate,
+        //   'foods': schedule.foods,
+        //   'isChoose': schedule.isChoose,
+        //   'creatorId': userId,
+        // }),
         body: json.encode({
-          'title': schedule.title,
-          'description': schedule.applyDate,
-          'foods': schedule.foods,
-          'isChoose': schedule.isChoose,
+          'title': 'Bình thường',
+          'description': DateTime.now(),
+          'foods': [],
+          'isChoose': false,
           'creatorId': userId,
         }),
       );

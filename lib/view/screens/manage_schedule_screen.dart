@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:suggest_food_app/controller/schedule_controller.dart';
+import 'package:suggest_food_app/view/screens/edit_schedule_screen.dart';
 import '../../provider/schedule_data.dart';
 import 'package:suggest_food_app/view/widget/schedule_item.dart';
 import 'package:provider/provider.dart';
@@ -6,7 +8,8 @@ import '../widget/app_drawer.dart';
 
 class ManageScheduleScreen extends StatelessWidget {
   static const routeName = '/manage-schedule';
-  const ManageScheduleScreen({super.key});
+  final ScheduleController scheduleController = ScheduleController();
+  ManageScheduleScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +23,19 @@ class ManageScheduleScreen extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         title: Text('My schedules'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed(EditScheduleScreen.routeName);
+            },
+            icon: const Icon(
+              Icons.add,
+            ),
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+        ],
       ),
       body: Container(
         color: Colors.white,

@@ -49,7 +49,8 @@ class AuthScreen extends StatelessWidget {
                       //   ..translate(-10.0),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: Colors.deepOrange.shade900,
+                        // color: Colors.deepOrange.shade900,
+                        color: Colors.green.shade600,
                         boxShadow: const [
                           BoxShadow(
                             blurRadius: 8,
@@ -61,10 +62,7 @@ class AuthScreen extends StatelessWidget {
                       child: Text(
                         'My App',
                         style: TextStyle(
-                          color: Theme.of(context)
-                              .accentTextTheme
-                              .headline6
-                              ?.color,
+                          color: Theme.of(context).accentColor,
                           fontSize: 50,
                           fontFamily: 'Anton',
                           fontWeight: FontWeight.normal,

@@ -17,5 +17,5 @@ class Food {
       this.category,
       this.urlImage,
       this.favourite = false,
-      this.recipe},);
+      this.recipe});
 }

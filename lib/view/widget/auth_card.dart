@@ -169,7 +169,7 @@ class _AuthCardState extends State<AuthCard> {
                   ),
                 TextButton(
                   child: Text(
-                      '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
+                      '${_authMode == AuthMode.Login ? 'SIGN UP' : 'LOGIN'}'),
                   onPressed: _switchAuthMode,
                 ),
               ],

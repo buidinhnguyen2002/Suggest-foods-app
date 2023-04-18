@@ -139,6 +139,7 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final foods = Provider.of<FoodData>(context, listen: false).foods;
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Product'),
@@ -201,11 +202,15 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
                     Container(
                       height: 300,
                       child: ListView.builder(
-                        itemBuilder: (context, index) =>
-                            FoodItem(updateStatusItem: setStatusFoods),
-                        itemCount: Provider.of<FoodData>(context, listen: false)
-                            .foods
-                            .length,
+                        itemBuilder: (context, index) => FoodItem(
+                          updateStatusItem: setStatusFoods,
+                          id: foods[index].id,
+                          category: foods[index].category,
+                          name: foods[index].name,
+                          rate: foods[index].rate,
+                          urlImage: foods[index].urlImage,
+                        ),
+                        itemCount: foods.length,
                       ),
                     ),
                   ],
