@@ -15,9 +15,6 @@ class EditScheduleScreen extends StatefulWidget {
 }
 
 class _EditScheduleScreenState extends State<EditScheduleScreen> {
-  final _titleFocusNode = FocusNode();
-  final _applyDateFocusNode = FocusNode();
-  final _foodsFocusNode = FocusNode();
   final _form = GlobalKey<FormState>();
   DateTime? _selectedDate;
   Map<String, bool> foodsItem = {};
@@ -59,7 +56,6 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
   );
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -85,6 +81,7 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
           'foods': _editSchedule.foods!,
           'isChoose': _editSchedule.isChoose,
         };
+        _selectedDate = _editSchedule.applyDate!;
       }
       fillMapFoods();
     }
@@ -94,7 +91,6 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
 
   void setFinalEditedSchedule() {
     _editSchedule = Schedule(
-      id: _editSchedule.id,
       applyDate: _selectedDate,
       foods: Provider.of<FoodData>(context, listen: false)
           .getFoodsByIds(getIdFoodsChoose),
@@ -137,12 +133,6 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
           ),
         );
       }
-      // finally {
-      //   setState(() {
-      //     _isLoading = false;
-      //   });
-      //   Navigator.of(context).pop();
-      // }
     }
     setState(() {
       _isLoading = false;
@@ -154,7 +144,7 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
     showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
+      firstDate: DateTime(2015),
       lastDate: DateTime(2030),
     ).then((pickedDate) {
       setState(() {
@@ -190,9 +180,6 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
                       initialValue: _initValues['title'].toString(),
                       decoration: InputDecoration(labelText: 'Titile'),
                       textInputAction: TextInputAction.next,
-                      onFieldSubmitted: (_) {
-                        // FocusScope.of(context).requestFocus(_priceFocusNode);
-                      },
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Please provide a value.';

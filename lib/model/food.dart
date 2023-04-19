@@ -9,13 +9,15 @@ class Food {
   final String? urlImage;
   final bool? favorite;
   final Recipe? recipe;
-  Food(
-      {this.id,
-      this.name,
-      this.description,
-      this.rate,
-      this.category,
-      this.urlImage,
-      this.favorite = false,
-      this.recipe});
+
+  Food({
+    this.id,
+    this.name,
+    this.description,
+    this.rate,
+    this.category,
+    this.urlImage,
+    this.favorite = false,
+    this.recipe,
+  });
 }

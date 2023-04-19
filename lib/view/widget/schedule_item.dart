@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:suggest_food_app/provider/schedule_data.dart';
 import 'package:suggest_food_app/view/screens/edit_schedule_screen.dart';
 
 class ScheduleItem extends StatefulWidget {
@@ -14,6 +16,18 @@ class ScheduleItem extends StatefulWidget {
 }
 
 class _ScheduleItemState extends State<ScheduleItem> {
+  void showSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return CheckboxListTile(
@@ -74,16 +88,16 @@ class _ScheduleItemState extends State<ScheduleItem> {
                             child: Text('No'),
                           ),
                           TextButton(
-                            onPressed: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    'Delete successful!',
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              );
-                              Navigator.of(context).pop();
+                            onPressed: () async {
+                              try {
+                                await Provider.of<ScheduleData>(context,
+                                        listen: false)
+                                    .deleteSchedule(widget.id!)
+                                    .then((_) => showSnackBar(
+                                        context, 'Deleting successful'));
+                              } catch (e) {
+                                showSnackBar(context, 'Deleting failed!');
+                              }
                             },
                             child: Text('Yes'),
                           ),

@@ -1,5 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:suggest_food_app/model/food.dart';
+import 'package:suggest_food_app/model/ingredient.dart';
+import 'package:suggest_food_app/model/recipe.dart';
+import 'package:suggest_food_app/provider/dummy.dart';
+import '../model/http_exception.dart';
 import '../model/schedule.dart';
 import 'package:http/http.dart' as http;
 
@@ -48,6 +53,62 @@ class ScheduleData with ChangeNotifier {
     return [..._schedules];
   }
 
+  Future<void> fetchAndSetSchedule() async {
+    var url =
+        'https://suggest-food-app-default-rtdb.firebaseio.com/schedules/$userId.json?auth=$authToken';
+    try {
+      final response = await http.get(Uri.parse(url));
+      final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      final List<Schedule> loadedSchedules = [];
+      if (extractedData == null) {
+        return;
+      }
+      extractedData.forEach((scheduleId, scheduleData) {
+        loadedSchedules.add(
+          Schedule(
+            id: scheduleId,
+            isChoose: scheduleData['isChoose'],
+            title: scheduleData['title'],
+            applyDate: DateTime.parse(scheduleData['applyDate']),
+            foods: (scheduleData['foods'] as List<dynamic>)
+                .map(
+                  (food) => Food(
+                    id: food['id'],
+                    category: food['category'],
+                    description: food['description'],
+                    favorite: food['favorite'],
+                    name: food['name'],
+                    rate: food['rate'],
+                    urlImage: food['urlImage'],
+                    recipe: Recipe(
+                      ingredients:
+                          (food['recipe']['ingredients'] as List<dynamic>)
+                              .map(
+                                (ingredient) => Ingredient(
+                                  ingredient['name'],
+                                  ingredient['price'],
+                                ),
+                              )
+                              .toList(),
+                      steps: (food['recipe']['steps'] as List<dynamic>)
+                          .map(
+                            (step) => step.toString(),
+                          )
+                          .toList(),
+                    ),
+                  ),
+                )
+                .toList(),
+          ),
+        );
+      });
+      _schedules = loadedSchedules;
+      notifyListeners();
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   Schedule findById(String id) {
     return _schedules.firstWhere((schedule) => schedule.id == id);
   }
@@ -56,12 +117,36 @@ class ScheduleData with ChangeNotifier {
     final scheduleIndex =
         _schedules.indexWhere((schedule) => schedule.id == id);
     if (scheduleIndex > -1) {
-      final url = '';
+      final url =
+          'https://suggest-food-app-default-rtdb.firebaseio.com/schedules/$userId/$id.json?auth=$authToken';
       await http.patch(Uri.parse(url),
           body: json.encode({
             'title': newSchedule.title,
             'applyDate': newSchedule.applyDate,
-            'foods': newSchedule.foods,
+            'foods': newSchedule.foods!
+                .map((food) => {
+                      'id': food.id,
+                      'name': food.name,
+                      'description': food.description,
+                      'rate': food.rate,
+                      'category': food.category,
+                      'urlImage': food.urlImage,
+                      'favorite': food.favorite,
+                      'recipe': {
+                        'ingredients': food.recipe!.ingredients!
+                            .map((ingredient) => {
+                                  'name': ingredient.name,
+                                  'price': ingredient.price,
+                                })
+                            .toList(),
+                        'steps': food.recipe?.steps!
+                            .map((step) => {
+                                  'step': step,
+                                })
+                            .toList(),
+                      },
+                    })
+                .toList(),
             'isChoose': newSchedule.isChoose,
           }));
       _schedules[scheduleIndex] = newSchedule;
@@ -71,36 +156,55 @@ class ScheduleData with ChangeNotifier {
     }
   }
 
+  Future<void> deleteSchedule(String id) async {
+    final url =
+        'https://suggest-food-app-default-rtdb.firebaseio.com/schedules/$userId/$id.json?auth=$authToken';
+    final existingScheduleIndex =
+        _schedules.indexWhere((schedule) => schedule.id == id);
+    Schedule? existingSchedule = _schedules[existingScheduleIndex];
+    _schedules.removeAt(existingScheduleIndex);
+    notifyListeners();
+    final response = await http.delete(Uri.parse(url));
+    if (response.statusCode >= 400) {
+      _schedules.insert(existingScheduleIndex, existingSchedule);
+      notifyListeners();
+      throw HttpException('Could not delete product.');
+    }
+  }
+
   Future<void> addSchedule(Schedule schedule) async {
     final url =
-        'https://suggest-food-app-default-rtdb.firebaseio.com/schedules.json?auth=$authToken';
+        'https://suggest-food-app-default-rtdb.firebaseio.com/schedules/$userId.json?auth=$authToken';
     try {
       final response = await http.post(
         Uri.parse(url),
         body: json.encode({
           'title': schedule.title,
           'applyDate': schedule.applyDate?.toIso8601String(),
-          'foods': [
-            schedule.foods
-                ?.map((food) => {
-                      'id': food.id,
-                      'name': food.name,
-                      'description': food.description,
-                      'rate': food.rate,
-                      'category': food.category,
-                      'urlImage': food.urlImage,
-                      'favorite': food.favorite,
-                      'recipe': {
-                        'ingredients': [
-                          food.recipe?.ingredients.map((ingredient) => {
+          'foods': schedule.foods!
+              .map((food) => {
+                    'id': food.id,
+                    'name': food.name,
+                    'description': food.description,
+                    'rate': food.rate,
+                    'category': food.category,
+                    'urlImage': food.urlImage,
+                    'favorite': food.favorite,
+                    'recipe': {
+                      'ingredients': food.recipe!.ingredients!
+                          .map((ingredient) => {
                                 'name': ingredient.name,
                                 'price': ingredient.price,
-                              }),
-                        ],
-                      },
-                    })
-                .toList()
-          ],
+                              })
+                          .toList(),
+                      'steps': food.recipe?.steps!
+                          .map((step) => {
+                                'step': step,
+                              })
+                          .toList(),
+                    },
+                  })
+              .toList(),
           'isChoose': schedule.isChoose,
           'creatorId': userId,
         }),
