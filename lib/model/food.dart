@@ -7,7 +7,7 @@ class Food {
   final double? rate;
   final String? category;
   final String? urlImage;
-  final bool? favourite;
+  final bool? favorite;
   final Recipe? recipe;
   Food(
       {this.id,
@@ -16,6 +16,6 @@ class Food {
       this.rate,
       this.category,
       this.urlImage,
-      this.favourite = false,
+      this.favorite = false,
       this.recipe});
 }

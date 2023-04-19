@@ -14,8 +14,7 @@ class ManageScheduleScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    final schedules =
-        Provider.of<ScheduleData>(context, listen: false).schedules;
+    final schedules = Provider.of<ScheduleData>(context).schedules;
     return Scaffold(
       drawer: const AppDrawer(),
       appBar: AppBar(

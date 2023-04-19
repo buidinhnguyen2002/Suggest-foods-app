@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:suggest_food_app/model/food.dart';
 import 'package:suggest_food_app/model/schedule.dart';
 import 'package:suggest_food_app/provider/food_data.dart';
 import 'package:suggest_food_app/provider/schedule_data.dart';
@@ -28,14 +27,29 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
     for (var food in foods) {
       foodsItem.putIfAbsent(food.id!, () => false);
     }
-    print(foodsItem);
     return foodsItem;
+  }
+
+  int get getFoodsTic {
+    int count = 0;
+    foodsItem.forEach((key, value) {
+      if (value) count++;
+    });
+
+    return count;
+  }
+
+  List<String> get getIdFoodsChoose {
+    List<String> result = [];
+    foodsItem.forEach((key, value) {
+      if (value) result.add(key);
+    });
+
+    return result;
   }
 
   void setStatusFoods(String id, bool newValue) {
     foodsItem[id] = newValue;
-    print("alo");
-    print(foodsItem);
   }
 
   var _editSchedule = Schedule(
@@ -78,22 +92,34 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
     super.didChangeDependencies();
   }
 
+  void setFinalEditedSchedule() {
+    _editSchedule = Schedule(
+      id: _editSchedule.id,
+      applyDate: _selectedDate,
+      foods: Provider.of<FoodData>(context, listen: false)
+          .getFoodsByIds(getIdFoodsChoose),
+      isChoose: _editSchedule.isChoose,
+      title: _editSchedule.title,
+    );
+  }
+
   Future<void> _saveForm() async {
     final isValid = _form.currentState?.validate();
-    if (!isValid!) {
+    if (!isValid! || _selectedDate == null || getFoodsTic < 3) {
       return;
     }
     _form.currentState?.save();
+    setFinalEditedSchedule();
     setState(() {
       _isLoading = true;
     });
-    if (_editSchedule.id != '') {
+    if (_editSchedule.id != null && _editSchedule.id != '') {
       await Provider.of<ScheduleData>(context, listen: false)
           .updateSchedule(_editSchedule.id!, _editSchedule);
     } else {
       try {
         await Provider.of<ScheduleData>(context, listen: false)
-            .addProduct(_editSchedule);
+            .addSchedule(_editSchedule);
       } catch (error) {
         await showDialog<void>(
           context: context,

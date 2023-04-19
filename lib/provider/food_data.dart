@@ -71,4 +71,16 @@ class FoodData with ChangeNotifier {
   List<Food> get foods {
     return [..._foodFavorite];
   }
+
+  List<Food> getFoodsByIds(List<String> ids) {
+    List<Food> result = [];
+    ids.forEach((id) {
+      _foodFavorite.forEach((food) {
+        if (food.id == id) {
+          result.add(food);
+        }
+      });
+    });
+    return result;
+  }
 }

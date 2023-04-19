@@ -3,7 +3,7 @@ import 'package:suggest_food_app/provider/schedule_data.dart';
 
 class ScheduleController {
   final Schedule schedule = Schedule();
-  final ScheduleData scheduleData = ScheduleData();
+  // final ScheduleData scheduleData = ScheduleData();
 
   ScheduleController();
 }

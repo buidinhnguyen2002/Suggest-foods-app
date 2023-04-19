@@ -23,10 +23,14 @@ class MyApp extends StatelessWidget {
           create: (ctx) => Auth(),
         ),
         ChangeNotifierProvider(
-          create: (ctx) => ScheduleData(),
-        ),
-        ChangeNotifierProvider(
           create: (ctx) => FoodData(),
+        ),
+        ChangeNotifierProxyProvider<Auth, ScheduleData>(
+          create: (context) => ScheduleData([], authToken: '', userId: ''),
+          update: (context, auth, previousSchedules) => ScheduleData(
+              previousSchedules == null ? [] : previousSchedules.schedules,
+              authToken: auth.token,
+              userId: auth.userId),
         ),
       ],
       child: Consumer<Auth>(

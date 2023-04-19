@@ -1,7 +1,5 @@
 import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
-import 'package:suggest_food_app/provider/dummy.dart';
+import 'package:flutter/foundation.dart';
 import '../model/schedule.dart';
 import 'package:http/http.dart' as http;
 
@@ -45,7 +43,7 @@ class ScheduleData with ChangeNotifier {
   ];
   final String? authToken;
   final String? userId;
-  ScheduleData({this.authToken, this.userId});
+  ScheduleData(this._schedules, {this.authToken, this.userId});
   List<Schedule> get schedules {
     return [..._schedules];
   }
@@ -73,24 +71,37 @@ class ScheduleData with ChangeNotifier {
     }
   }
 
-  Future<void> addProduct(Schedule schedule) async {
+  Future<void> addSchedule(Schedule schedule) async {
     final url =
         'https://suggest-food-app-default-rtdb.firebaseio.com/schedules.json?auth=$authToken';
     try {
       final response = await http.post(
         Uri.parse(url),
-        // body: json.encode({
-        //   'title': schedule.title,
-        //   'description': schedule.applyDate,
-        //   'foods': schedule.foods,
-        //   'isChoose': schedule.isChoose,
-        //   'creatorId': userId,
-        // }),
         body: json.encode({
-          'title': 'Bình thường',
-          'description': DateTime.now(),
-          'foods': [],
-          'isChoose': false,
+          'title': schedule.title,
+          'applyDate': schedule.applyDate?.toIso8601String(),
+          'foods': [
+            schedule.foods
+                ?.map((food) => {
+                      'id': food.id,
+                      'name': food.name,
+                      'description': food.description,
+                      'rate': food.rate,
+                      'category': food.category,
+                      'urlImage': food.urlImage,
+                      'favorite': food.favorite,
+                      'recipe': {
+                        'ingredients': [
+                          food.recipe?.ingredients.map((ingredient) => {
+                                'name': ingredient.name,
+                                'price': ingredient.price,
+                              }),
+                        ],
+                      },
+                    })
+                .toList()
+          ],
+          'isChoose': schedule.isChoose,
           'creatorId': userId,
         }),
       );
