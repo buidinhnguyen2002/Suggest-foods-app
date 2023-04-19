@@ -9,30 +9,31 @@ class FoodItem extends StatefulWidget {
   final String? category;
   final String? urlImage;
   final double? rate;
-  const FoodItem(
+  bool isChoose;
+  FoodItem(
       {super.key,
       required this.updateStatusItem,
       this.id,
       this.name,
       this.category,
       this.urlImage,
-      this.rate});
+      this.rate,
+      required this.isChoose});
 
   @override
   State<FoodItem> createState() => _FoodItemState();
 }
 
 class _FoodItemState extends State<FoodItem> {
-  bool isChoose = false;
   @override
   Widget build(BuildContext context) {
     return CheckboxListTile(
-      value: isChoose,
+      value: widget.isChoose,
       onChanged: (value) {
         setState(() {
-          isChoose = !isChoose;
+          widget.isChoose = !widget.isChoose;
         });
-        widget.updateStatusItem(widget.id!, isChoose);
+        widget.updateStatusItem(widget.id!, widget.isChoose);
       },
       activeColor: Theme.of(context).primaryColor,
       checkColor: Theme.of(context).accentColor,

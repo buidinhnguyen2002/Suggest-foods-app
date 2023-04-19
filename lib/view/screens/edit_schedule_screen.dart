@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:suggest_food_app/model/food.dart';
 import 'package:suggest_food_app/model/schedule.dart';
 import 'package:suggest_food_app/provider/food_data.dart';
 import 'package:suggest_food_app/provider/schedule_data.dart';
@@ -18,17 +19,16 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
   final _form = GlobalKey<FormState>();
   DateTime? _selectedDate;
   Map<String, bool> foodsItem = {};
-
-  Map<String, bool> fillMapFoods() {
+  int count = 0;
+  Map<String, bool> fillMapFoods(List<Food> foodsChoose) {
     final foods = Provider.of<FoodData>(context, listen: false).foods;
     for (var food in foods) {
-      foodsItem.putIfAbsent(food.id!, () => false);
+      foodsItem.putIfAbsent(food.id!, () => containFood(foodsChoose, food));
     }
     return foodsItem;
   }
 
   int get getFoodsTic {
-    int count = 0;
     foodsItem.forEach((key, value) {
       if (value) count++;
     });
@@ -61,6 +61,7 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
 
   var _isInit = true;
   var _initValues = {
+    'id': '',
     'title': '',
     'applyDate': null,
     'foods': [],
@@ -82,8 +83,8 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
           'isChoose': _editSchedule.isChoose,
         };
         _selectedDate = _editSchedule.applyDate!;
+        count = _editSchedule.foods!.length;
       }
-      fillMapFoods();
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -91,6 +92,9 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
 
   void setFinalEditedSchedule() {
     _editSchedule = Schedule(
+      id: _initValues['id'].toString() == ''
+          ? ''
+          : _initValues['id'].toString(),
       applyDate: _selectedDate,
       foods: Provider.of<FoodData>(context, listen: false)
           .getFoodsByIds(getIdFoodsChoose),
@@ -109,9 +113,9 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
     setState(() {
       _isLoading = true;
     });
-    if (_editSchedule.id != null && _editSchedule.id != '') {
+    if (_editSchedule.id != '') {
       await Provider.of<ScheduleData>(context, listen: false)
-          .updateSchedule(_editSchedule.id!, _editSchedule);
+          .updateSchedule(_editSchedule.id.toString(), _editSchedule);
     } else {
       try {
         await Provider.of<ScheduleData>(context, listen: false)
@@ -148,14 +152,33 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
       lastDate: DateTime(2030),
     ).then((pickedDate) {
       setState(() {
-        _selectedDate = pickedDate!;
+        if (pickedDate != null) _selectedDate = pickedDate;
       });
     });
+  }
+
+  bool containFood(List<Food> foodsContain, Food food) {
+    for (var f in foodsContain) {
+      if (f.id == food.id) {
+        return true;
+      }
+    }
+    for (var id in getIdFoodsChoose) {
+      if (id == food.id) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @override
   Widget build(BuildContext context) {
     final foods = Provider.of<FoodData>(context, listen: false).foods;
+    final List<Food> foodsChoose =
+        (_initValues['foods'] as List<dynamic>).isNotEmpty
+            ? _initValues['foods'] as List<Food>
+            : [];
+    fillMapFoods(foodsChoose);
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Product'),
@@ -222,6 +245,9 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
                           name: foods[index].name,
                           rate: foods[index].rate,
                           urlImage: foods[index].urlImage,
+                          isChoose: containFood(foodsChoose, foods[index])
+                              ? true
+                              : false,
                         ),
                         itemCount: foods.length,
                       ),

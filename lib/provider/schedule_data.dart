@@ -116,13 +116,14 @@ class ScheduleData with ChangeNotifier {
   Future<void> updateSchedule(String id, Schedule newSchedule) async {
     final scheduleIndex =
         _schedules.indexWhere((schedule) => schedule.id == id);
+    print(scheduleIndex);
     if (scheduleIndex > -1) {
       final url =
           'https://suggest-food-app-default-rtdb.firebaseio.com/schedules/$userId/$id.json?auth=$authToken';
       await http.patch(Uri.parse(url),
           body: json.encode({
             'title': newSchedule.title,
-            'applyDate': newSchedule.applyDate,
+            'applyDate': newSchedule.applyDate?.toIso8601String(),
             'foods': newSchedule.foods!
                 .map((food) => {
                       'id': food.id,
