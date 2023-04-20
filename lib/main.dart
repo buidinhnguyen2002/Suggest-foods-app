@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:suggest_food_app/controller/schedule_controller.dart';
 import 'package:suggest_food_app/provider/auth.dart';
+import 'package:suggest_food_app/provider/food_data.dart';
+import 'package:suggest_food_app/provider/schedule_data.dart';
+import 'package:suggest_food_app/view/screens/edit_schedule_screen.dart';
 import 'package:suggest_food_app/view/screens/home_screen.dart';
 import 'package:suggest_food_app/view/screens/auth_screen.dart';
 import 'package:suggest_food_app/view/screens/manage_schedule_screen.dart';
@@ -18,6 +22,16 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (ctx) => Auth(),
         ),
+        ChangeNotifierProvider(
+          create: (ctx) => FoodData(),
+        ),
+        ChangeNotifierProxyProvider<Auth, ScheduleData>(
+          create: (context) => ScheduleData([], authToken: '', userId: ''),
+          update: (context, auth, previousSchedules) => ScheduleData(
+              previousSchedules == null ? [] : previousSchedules.schedules,
+              authToken: auth.token,
+              userId: auth.userId),
+        ),
       ],
       child: Consumer<Auth>(
         builder: (context, auth, child) => MaterialApp(
@@ -27,10 +41,11 @@ class MyApp extends StatelessWidget {
             primaryColor: Colors.green,
             accentColor: Colors.white,
           ),
-          home: true ? HomeScreen() : AuthScreen(),
+          home: auth.isAuth ? HomeScreen() : AuthScreen(),
           routes: {
             HomeScreen.routeName: (context) => HomeScreen(),
             ManageScheduleScreen.routeName: (context) => ManageScheduleScreen(),
+            EditScheduleScreen.routeName: (context) => EditScheduleScreen(),
           },
         ),
       ),

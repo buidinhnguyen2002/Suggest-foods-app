@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
+import 'package:suggest_food_app/view/screens/home_screen.dart';
 import 'package:suggest_food_app/view/screens/manage_schedule_screen.dart';
 
 import '../../provider/auth.dart';
@@ -35,7 +34,7 @@ class AppDrawer extends StatelessWidget {
             leading: const Icon(Icons.home),
             title: const Text('Home'),
             onTap: () {
-              Navigator.of(context).pushReplacementNamed('/');
+              Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
             },
           ),
           const Divider(),
@@ -65,7 +64,7 @@ class AppDrawer extends StatelessWidget {
             title: const Text('Logout'),
             onTap: () {
               Navigator.of(context).pop();
-              Provider.of<Auth>(context).logout();
+              Provider.of<Auth>(context, listen: false).logout();
             },
           ),
         ],

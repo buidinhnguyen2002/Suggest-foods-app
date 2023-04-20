@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:suggest_food_app/view/widget/card_food_item.dart';
-import '../../provider/dummy_food_favorite.dart';
+import '../../provider/dummy.dart';
 
 class FoodFavoriteSlide extends StatelessWidget {
   const FoodFavoriteSlide({super.key});
