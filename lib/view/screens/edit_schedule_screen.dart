@@ -173,6 +173,7 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final deviceSize = MediaQuery.of(context).size;
     final foods = Provider.of<FoodData>(context, listen: false).foods;
     final List<Food> foodsChoose =
         (_initValues['foods'] as List<dynamic>).isNotEmpty
@@ -181,13 +182,8 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
     fillMapFoods(foodsChoose);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Product'),
-        actions: [
-          IconButton(
-            onPressed: _saveForm,
-            icon: Icon(Icons.save),
-          )
-        ],
+        title: Text(
+            _editSchedule.id != null ? 'Edit Schedule' : 'Create schedule'),
       ),
       body: _isLoading
           ? const Center(
@@ -236,7 +232,20 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
                       ),
                     ),
                     Container(
-                      height: 300,
+                      height: deviceSize.height - 70 - 16 * 2 - 20 - 200,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white.withOpacity(0.9),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.4),
+                            offset: const Offset(0, 2),
+                            blurRadius: 4.0,
+                          ),
+                        ],
+                      ),
                       child: ListView.builder(
                         itemBuilder: (context, index) => FoodItem(
                           updateStatusItem: setStatusFoods,
@@ -250,6 +259,20 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
                               : false,
                         ),
                         itemCount: foods.length,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    TextButton(
+                      onPressed: _saveForm,
+                      child: Text(
+                        _editSchedule.id != null ? 'Update' : 'Create',
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary),
+                      ),
+                      style: TextButton.styleFrom(
+                        backgroundColor: Theme.of(context).primaryColor,
                       ),
                     ),
                   ],
