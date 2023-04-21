@@ -3,11 +3,14 @@ import 'package:provider/provider.dart';
 import 'package:suggest_food_app/provider/schedule_data.dart';
 import 'package:suggest_food_app/view/screens/edit_schedule_screen.dart';
 
+import '../../controller/schedule_controller.dart';
+
 class ScheduleItem extends StatefulWidget {
   String? id;
   bool isChoose;
   String? name;
   DateTime? applyDate;
+
   ScheduleItem(
       {super.key, this.id, required this.isChoose, this.name, this.applyDate});
 
@@ -16,6 +19,7 @@ class ScheduleItem extends StatefulWidget {
 }
 
 class _ScheduleItemState extends State<ScheduleItem> {
+  final ScheduleController scheduleController = ScheduleController();
   void showSnackBar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -90,9 +94,8 @@ class _ScheduleItemState extends State<ScheduleItem> {
                           TextButton(
                             onPressed: () async {
                               try {
-                                await Provider.of<ScheduleData>(context,
-                                        listen: false)
-                                    .deleteSchedule(widget.id!)
+                                await scheduleController
+                                    .deleteSchedule(context, widget.id!)
                                     .then((_) => showSnackBar(
                                         context, 'Deleting successful'));
                               } catch (e) {

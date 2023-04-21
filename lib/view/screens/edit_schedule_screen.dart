@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:suggest_food_app/controller/schedule_controller.dart';
 import 'package:suggest_food_app/model/food.dart';
 import 'package:suggest_food_app/model/schedule.dart';
 import 'package:suggest_food_app/provider/food_data.dart';
@@ -20,6 +21,7 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
   DateTime? _selectedDate;
   Map<String, bool> foodsItem = {};
   int count = 0;
+  final ScheduleController scheduleController = ScheduleController();
   Map<String, bool> fillMapFoods(List<Food> foodsChoose) {
     final foods = Provider.of<FoodData>(context, listen: false).foods;
     for (var food in foods) {
@@ -114,12 +116,11 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
       _isLoading = true;
     });
     if (_editSchedule.id != '') {
-      await Provider.of<ScheduleData>(context, listen: false)
-          .updateSchedule(_editSchedule.id.toString(), _editSchedule);
+      await scheduleController.updateSchedule(
+          context, _editSchedule.id.toString(), _editSchedule);
     } else {
       try {
-        await Provider.of<ScheduleData>(context, listen: false)
-            .addSchedule(_editSchedule);
+        await scheduleController.createSchedule(context, _editSchedule);
       } catch (error) {
         await showDialog<void>(
           context: context,
