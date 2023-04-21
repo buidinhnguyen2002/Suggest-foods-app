@@ -4,6 +4,7 @@ import 'package:suggest_food_app/model/food.dart';
 import 'package:suggest_food_app/model/ingredient.dart';
 import 'package:suggest_food_app/model/recipe.dart';
 import 'package:suggest_food_app/provider/dummy.dart';
+import 'package:suggest_food_app/util/constants.dart';
 import '../model/http_exception.dart';
 import '../model/schedule.dart';
 import 'package:http/http.dart' as http;
@@ -54,8 +55,9 @@ class ScheduleData with ChangeNotifier {
   }
 
   Future<void> fetchAndSetSchedule() async {
-    var url =
-        'https://suggest-food-app-default-rtdb.firebaseio.com/schedules/$userId.json?auth=$authToken';
+    // var url =
+    //     'https://suggest-food-app-default-rtdb.firebaseio.com/schedules/$userId.json?auth=$authToken';
+    var url = '$apiSchedules$userId.json?auth=$authToken';
     try {
       final response = await http.get(Uri.parse(url));
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
@@ -116,10 +118,8 @@ class ScheduleData with ChangeNotifier {
   Future<void> updateSchedule(String id, Schedule newSchedule) async {
     final scheduleIndex =
         _schedules.indexWhere((schedule) => schedule.id == id);
-    print(scheduleIndex);
     if (scheduleIndex > -1) {
-      final url =
-          'https://suggest-food-app-default-rtdb.firebaseio.com/schedules/$userId/$id.json?auth=$authToken';
+      final url = '$apiSchedules$userId/$id.json?auth=$authToken';
       await http.patch(Uri.parse(url),
           body: json.encode({
             'title': newSchedule.title,
@@ -158,8 +158,7 @@ class ScheduleData with ChangeNotifier {
   }
 
   Future<void> deleteSchedule(String id) async {
-    final url =
-        'https://suggest-food-app-default-rtdb.firebaseio.com/schedules/$userId/$id.json?auth=$authToken';
+    final url = '$apiSchedules$userId/$id.json?auth=$authToken';
     final existingScheduleIndex =
         _schedules.indexWhere((schedule) => schedule.id == id);
     Schedule? existingSchedule = _schedules[existingScheduleIndex];
@@ -174,8 +173,7 @@ class ScheduleData with ChangeNotifier {
   }
 
   Future<void> addSchedule(Schedule schedule) async {
-    final url =
-        'https://suggest-food-app-default-rtdb.firebaseio.com/schedules/$userId.json?auth=$authToken';
+    final url = '$apiSchedules$userId.json?auth=$authToken';
     try {
       final response = await http.post(
         Uri.parse(url),

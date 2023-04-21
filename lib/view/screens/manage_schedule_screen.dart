@@ -8,7 +8,6 @@ import '../widget/app_drawer.dart';
 
 class ManageScheduleScreen extends StatelessWidget {
   static const routeName = '/manage-schedule';
-  // final ScheduleController scheduleController = ScheduleController();
 
   const ManageScheduleScreen({super.key});
   Future<void> _refreshSchedules(BuildContext context) async {
