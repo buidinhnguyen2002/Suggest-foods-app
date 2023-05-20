@@ -141,11 +141,74 @@ class FoodData with ChangeNotifier {
     });
     return result;
   }
-  List<Food> _food = [];
+
+  List<Food> _food = [
+    Food(
+      id: '1',
+      name: 'Cá chép',
+      category: 'Món chính',
+      description: 'fwefewf',
+      rate: 5.0,
+      urlImage:
+          'https://cdn.tgdd.vn/Files/2020/11/30/1310363/tong-hop-cac-mon-an-tu-ca-chep-bo-tui-de-nau-ca-thang-khong-bao-gio-ngan-202201071820154823.jpg',
+      recipe: Recipe(ingredients: [
+        Ingredient('Ca chep', 10),
+        Ingredient('Ot', 2),
+        Ingredient('Hanh', 1),
+      ], steps: [
+        'Step1',
+        'Step2',
+        'Step3',
+        'Step4',
+      ]),
+    ),
+    Food(
+      id: '2',
+      name: 'Cá chép',
+      category: 'Món chính',
+      description: 'fwefewf',
+      rate: 5.0,
+      urlImage:
+          'https://cdn.tgdd.vn/Files/2020/11/30/1310363/tong-hop-cac-mon-an-tu-ca-chep-bo-tui-de-nau-ca-thang-khong-bao-gio-ngan-202201071820154823.jpg',
+      recipe: Recipe(ingredients: [
+        Ingredient('Ca chep', 10),
+        Ingredient('Ot', 2),
+        Ingredient('Hanh', 1),
+      ], steps: [
+        'Step1',
+        'Step2',
+        'Step3',
+        'Step4',
+      ]),
+    ),
+    Food(
+      id: '3',
+      name: 'Cá chép',
+      category: 'Món chính',
+      description: 'fwefewf',
+      rate: 5.0,
+      urlImage:
+          'https://cdn.tgdd.vn/Files/2020/11/30/1310363/tong-hop-cac-mon-an-tu-ca-chep-bo-tui-de-nau-ca-thang-khong-bao-gio-ngan-202201071820154823.jpg',
+      recipe: Recipe(ingredients: [
+        Ingredient('Ca chep', 10),
+        Ingredient('Ot', 2),
+        Ingredient('Hanh', 1),
+      ], steps: [
+        'Step1',
+        'Step2',
+        'Step3',
+        'Step4',
+      ]),
+    ),
+  ];
 
   final String? authToken;
   final String? userId;
   FoodData(List<Food> _food, {this.authToken, this.userId});
+
+  List<Food> get food {
+    return [..._food];
+  }
 
   Future<void> addFood(Food food) async {
     final url = '$apiFoods$userId.json?auth=$authToken';
@@ -162,15 +225,17 @@ class FoodData with ChangeNotifier {
           'favorite': food.favorite,
           'recipe': {
             'ingredients': food.recipe!.ingredients!
-              .map((ingredient) => {
-                'name': ingredient.name,
-                'price': ingredient.price,
-                }).toList(),
-                'steps': food.recipe?.steps!
-                  .map((step) => {
-                    'step': step,
-                    }).toList(),
-             },
+                .map((ingredient) => {
+                      'name': ingredient.name,
+                      'price': ingredient.price,
+                    })
+                .toList(),
+            'steps': food.recipe?.steps!
+                .map((step) => {
+                      'step': step,
+                    })
+                .toList(),
+          },
         }),
       );
       final newFood = Food(
@@ -181,7 +246,7 @@ class FoodData with ChangeNotifier {
         urlImage: food.urlImage,
         favorite: food.favorite,
         recipe: food.recipe,
-      )
+      );
       _food.add(newFood);
       notifyListeners();
     } catch (e) {
@@ -189,7 +254,9 @@ class FoodData with ChangeNotifier {
     }
   }
 
-  Future<void> updateFood(String id, Food food) async {
+  Future<void> updateFood(String id, Food food) async {}
 
-  }
+  fetchAndSetFood() {}
+
+  void updateStatus(String id, bool isChoose) {}
 }

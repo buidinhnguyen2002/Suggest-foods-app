@@ -8,4 +8,7 @@ class FoodController {
   Future<void> createFood(BuildContext context, Food food) async {
     await Provider.of<FoodData>(context, listen: false).addFood(food);
   }
+  Future<void> updateFood(BuildContext context, String id, Food food) async {
+    await Provider.of<FoodData>(context, listen: false).updateFood(id, food);
+  }
 }
