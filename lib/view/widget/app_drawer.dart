@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:suggest_food_app/view/screens/home_screen.dart';
+import 'package:suggest_food_app/view/screens/manage_food_screen.dart';
 import 'package:suggest_food_app/view/screens/manage_schedule_screen.dart';
 
 import '../../provider/auth.dart';
@@ -41,7 +42,9 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.fastfood),
             title: const Text('Manage foods'),
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).pushReplacementNamed(ManageFoodScreen.routeName);
+            },
           ),
           const Divider(),
           ListTile(

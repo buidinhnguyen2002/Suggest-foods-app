@@ -55,7 +55,7 @@ class Auth with ChangeNotifier {
       _autoLogout();
       notifyListeners();
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 

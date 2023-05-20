@@ -1,8 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:suggest_food_app/model/ingredient.dart';
 import 'package:suggest_food_app/model/recipe.dart';
+import 'package:suggest_food_app/provider/dummy.dart';
+import 'package:suggest_food_app/util/constants.dart';
 
 import '../model/food.dart';
+import 'package:http/http.dart' as http;
 
 class FoodData with ChangeNotifier {
   final List<Food> _foodFavorite = [
@@ -121,7 +126,7 @@ class FoodData with ChangeNotifier {
       ]),
     ),
   ];
-  List<Food> get foods {
+  List<Food> get foodFavorites {
     return [..._foodFavorite];
   }
 
@@ -135,5 +140,56 @@ class FoodData with ChangeNotifier {
       });
     });
     return result;
+  }
+  List<Food> _food = [];
+
+  final String? authToken;
+  final String? userId;
+  FoodData(List<Food> _food, {this.authToken, this.userId});
+
+  Future<void> addFood(Food food) async {
+    final url = '$apiFoods$userId.json?auth=$authToken';
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        body: json.encode({
+          'id': food.id,
+          'name': food.name,
+          'description': food.description,
+          'rate': food.rate,
+          'category': food.category,
+          'urlImage': food.urlImage,
+          'favorite': food.favorite,
+          'recipe': {
+            'ingredients': food.recipe!.ingredients!
+              .map((ingredient) => {
+                'name': ingredient.name,
+                'price': ingredient.price,
+                }).toList(),
+                'steps': food.recipe?.steps!
+                  .map((step) => {
+                    'step': step,
+                    }).toList(),
+             },
+        }),
+      );
+      final newFood = Food(
+        id: food.id,
+        description: food.description,
+        rate: food.rate,
+        category: food.category,
+        urlImage: food.urlImage,
+        favorite: food.favorite,
+        recipe: food.recipe,
+      )
+      _food.add(newFood);
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> updateFood(String id, Food food) async {
+
   }
 }
