@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:suggest_food_app/controller/food_controller.dart';
 import 'package:suggest_food_app/model/food.dart';
 import 'package:suggest_food_app/model/recipe.dart';
 import 'package:suggest_food_app/provider/food_data.dart';
@@ -19,9 +20,11 @@ class _EditFoodScreenState extends State<EditFoodScreen> {
   String _description = '';
   String _category = '';
   String _urlImage = '';
-  double _rate = 0;
+  double _rate = 0.0;
   bool _favorite = false;
   Recipe _recipe = Recipe(ingredients: [], steps: []);
+
+  final FoodController foodController = new FoodController();
 
   var _initValues = {
     'id': '',
@@ -39,7 +42,6 @@ class _EditFoodScreenState extends State<EditFoodScreen> {
     category: '',
     urlImage: '',
   );
-
   var _isLoading = false;
 
   @override
@@ -156,6 +158,57 @@ class _EditFoodScreenState extends State<EditFoodScreen> {
             ),
     );
   }
+   void setFinalEditedFood() {
+    _editFood = Food(
+      id: _initValues['id'].toString() == ''
+          ? ''
+          : _initValues['id'].toString(),
+      name: _editFood.name,
+      description: _editFood.description,
+      rate: 0.0,
+      category: _editFood.category,
+      urlImage: _editFood.urlImage,
+      favorite: false,
+      recipe: _recipe,
+    );
+  }
 
-  Future<void> _saveForm() async {}
+  Future<void> _saveForm() async {
+    final isValid = _form.currentState?.validate();
+    if (!isValid!) {
+      return;
+    }
+    setFinalEditedFood();
+    setState(() {
+      _isLoading = true;
+    });
+    if (_editFood.id != '') {
+      await foodController.updateFood(
+          context, _editFood.id.toString(), _editFood);
+    } else {
+      try {
+        await foodController.createFood(context, _editFood);
+      } catch (error) {
+        await showDialog<void>(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: const Text('An error occurred'),
+            content: const Text('Something went wrong.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(ctx).pop();
+                },
+                child: Text('Okay'),
+              ),
+            ],
+          ),
+        );
+      }
+    }
+    setState(() {
+      _isLoading = false;
+    });
+    Navigator.of(context).pop();
+  }
 }

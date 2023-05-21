@@ -256,6 +256,10 @@ class FoodData with ChangeNotifier {
     return [..._food];
   }
 
+  String get fid{
+    return [..._food].length.toString();
+  }
+
   Future<void> fetchAndSetFood() async {
     var url = '$apiFoods$userId.json?auth=$authToken';
     try {
@@ -386,7 +390,9 @@ class FoodData with ChangeNotifier {
     }
   }
 
-  Future<void> updateStatus(String? id, bool isChoose) async {}
+  Future<void> updateStatus(String? id, bool isChoose) async {
+
+  }
   void updateFavoriteStatus(String id, bool newFavoriteStatus) {
     final foodIndex = _food.indexWhere((food) => food.id == id);
     if (foodIndex >= 0) {

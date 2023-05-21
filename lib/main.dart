@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:suggest_food_app/provider/auth.dart';
 import 'package:suggest_food_app/provider/food_data.dart';
 import 'package:suggest_food_app/provider/schedule_data.dart';
+import 'package:suggest_food_app/view/screens/edit_food_screen.dart';
 import 'package:suggest_food_app/view/screens/edit_schedule_screen.dart';
 import 'package:suggest_food_app/view/screens/home_screen.dart';
 import 'package:suggest_food_app/view/screens/auth_screen.dart';
@@ -51,6 +52,7 @@ class MyApp extends StatelessWidget {
           routes: {
             HomeScreen.routeName: (context) => HomeScreen(),
             ManageFoodScreen.routeName: (context) => ManageFoodScreen(),
+            EditFoodScreen.routeName: (context) => EditFoodScreen(),
             ManageScheduleScreen.routeName: (context) => ManageScheduleScreen(),
             EditScheduleScreen.routeName: (context) => EditScheduleScreen(),
             ScheduleDetailScreen.routeName: (context) => ScheduleDetailScreen(),

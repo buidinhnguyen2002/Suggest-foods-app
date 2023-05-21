@@ -11,4 +11,7 @@ class FoodController {
   Future<void> updateFood(BuildContext context, String id, Food food) async {
     await Provider.of<FoodData>(context, listen: false).updateFood(id, food);
   }
+  Future<void> deleteFood(BuildContext context, String id) async {
+    await Provider.of<FoodData>(context, listen: false).deleteFood(id);
+  }
 }
