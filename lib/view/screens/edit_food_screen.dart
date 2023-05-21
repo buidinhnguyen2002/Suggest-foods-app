@@ -20,23 +20,8 @@ class _EditFoodScreenState extends State<EditFoodScreen> {
   String _category = '';
   String _urlImage = '';
   double _rate = 0;
+  bool _favorite = false;
   Recipe _recipe = Recipe(ingredients: [], steps: []);
-  // Create Text Editing Controllers for each input field
-  final nameController = TextEditingController();
-  final descriptionController = TextEditingController();
-  final categoryController = TextEditingController();
-  final urlImageController = TextEditingController();
-  final rateController = TextEditingController();
-  @override
-  void dispose() {
-    // Clean up the controllers when the Widget is removed from the Widget tree
-    nameController.dispose();
-    descriptionController.dispose();
-    categoryController.dispose();
-    urlImageController.dispose();
-    rateController.dispose();
-    super.dispose();
-  }
 
   var _initValues = {
     'id': '',
@@ -95,26 +80,6 @@ class _EditFoodScreenState extends State<EditFoodScreen> {
                       },
                     ),
                     TextFormField(
-                      initialValue: _initValues['category'].toString(),
-                      decoration: InputDecoration(labelText: 'Category'),
-                      textInputAction: TextInputAction.next,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please provide a value.';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        _editFood = Food(
-                          id: _editFood.id,
-                          name: _editFood.name,
-                          description: _editFood.description,
-                          category: value,
-                          urlImage: _editFood.urlImage,
-                        );
-                      },
-                    ),
-                    TextFormField(
                       initialValue: _initValues['description'].toString(),
                       decoration: InputDecoration(labelText: 'Description'),
                       textInputAction: TextInputAction.next,
@@ -130,6 +95,26 @@ class _EditFoodScreenState extends State<EditFoodScreen> {
                           name: _editFood.name,
                           description: value,
                           category: _editFood.category,
+                          urlImage: _editFood.urlImage,
+                        );
+                      },
+                    ),
+                    TextFormField(
+                      initialValue: _initValues['category'].toString(),
+                      decoration: InputDecoration(labelText: 'Category'),
+                      textInputAction: TextInputAction.next,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please provide a value.';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        _editFood = Food(
+                          id: _editFood.id,
+                          name: _editFood.name,
+                          description: _editFood.description,
+                          category: value,
                           urlImage: _editFood.urlImage,
                         );
                       },

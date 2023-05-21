@@ -7,7 +7,7 @@ class Food {
   final double? rate;
   final String? category;
   final String? urlImage;
-  final bool? favorite;
+  late final bool? favorite;
   final Recipe? recipe;
   final bool? isChoose;
 
