@@ -24,7 +24,7 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
   int count = 0;
   final ScheduleController scheduleController = ScheduleController();
   Map<String, bool> fillMapFoods(List<Food> foodsChoose) {
-    final foods = Provider.of<FoodData>(context, listen: false).foods;
+    final foods = Provider.of<FoodData>(context, listen: false).foodFavorites;
     for (var food in foods) {
       foodsItem.putIfAbsent(food.id!, () => containFood(foodsChoose, food));
     }
@@ -210,7 +210,7 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    final foods = Provider.of<FoodData>(context, listen: false).foods;
+    final foods = Provider.of<FoodData>(context, listen: false).foodFavorites;
     final List<Food> foodsChoose =
         (_initValues['foods'] as List<dynamic>).isNotEmpty
             ? _initValues['foods'] as List<Food>

@@ -58,7 +58,7 @@ class Auth with ChangeNotifier {
       if (urlSegment == 'accounts:signUp') saveUser(email, password);
       notifyListeners();
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 

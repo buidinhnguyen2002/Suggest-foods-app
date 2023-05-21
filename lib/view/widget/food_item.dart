@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 
 class FoodItem extends StatefulWidget {
@@ -39,7 +37,7 @@ class _FoodItemState extends State<FoodItem> {
       checkColor: Theme.of(context).accentColor,
       controlAffinity: ListTileControlAffinity.leading,
       title: Text(
-        widget.name!,
+        widget.name ?? "",
         style: const TextStyle(
           fontWeight: FontWeight.w500,
           fontSize: 18,
@@ -50,5 +48,11 @@ class _FoodItemState extends State<FoodItem> {
       tristate: true,
       secondary: Image.network(widget.urlImage!),
     );
+    // return Row(children: [
+        
+    //     ListTile(leading: IconButton(icon: Icon(Icons.favorite_outline), onPressed: (){
+
+    //     },),),
+    // ],);
   }
 }
