@@ -9,6 +9,7 @@ class Food {
   final String? urlImage;
   final bool? favorite;
   final Recipe? recipe;
+  final bool? isChoose;
 
   Food({
     this.id,
@@ -19,5 +20,6 @@ class Food {
     this.urlImage,
     this.favorite = false,
     this.recipe,
+    this.isChoose = false,
   });
 }
