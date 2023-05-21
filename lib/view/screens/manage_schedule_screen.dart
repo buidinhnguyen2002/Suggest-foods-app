@@ -15,6 +15,11 @@ class ManageScheduleScreen extends StatelessWidget {
         .fetchAndSetSchedule();
   }
 
+  // 3.1 Gọi hàm hiển thị trang EditScheduleScreen
+  void showCreateScheduleScreen(BuildContext context) {
+    Navigator.of(context).pushNamed(EditScheduleScreen.routeName);
+  }
+
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
@@ -27,9 +32,9 @@ class ManageScheduleScreen extends StatelessWidget {
         title: Text('My schedules'),
         actions: [
           IconButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed(EditScheduleScreen.routeName);
-            },
+            // 3. Nhấn icon dấu + để chuyển hướng đến trang EditScheduleScreen thực hiện chức năng tạo lịch
+            onPressed: () => showCreateScheduleScreen(
+                context), // 3.1 Gọi hàm hiển thị trang EditScheduleScreen
             icon: const Icon(
               Icons.add,
             ),

@@ -6,6 +6,7 @@ import 'package:suggest_food_app/model/food.dart';
 import 'package:suggest_food_app/model/schedule.dart';
 import 'package:suggest_food_app/provider/food_data.dart';
 import 'package:suggest_food_app/provider/schedule_data.dart';
+import 'package:suggest_food_app/view/screens/schedule_detail_screen.dart';
 import 'package:suggest_food_app/view/widget/food_item.dart';
 
 class EditScheduleScreen extends StatefulWidget {
@@ -18,7 +19,7 @@ class EditScheduleScreen extends StatefulWidget {
 
 class _EditScheduleScreenState extends State<EditScheduleScreen> {
   final _form = GlobalKey<FormState>();
-  DateTime? _selectedDate;
+  DateTime? _selectedDate = DateTime.now();
   Map<String, bool> foodsItem = {};
   int count = 0;
   final ScheduleController scheduleController = ScheduleController();
@@ -105,9 +106,30 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
     );
   }
 
+  bool checkInitFood() {
+    if (getFoodsTic < 1) {
+      return false;
+    }
+    return true;
+  }
+
   Future<void> _saveForm() async {
     final isValid = _form.currentState?.validate();
-    if (!isValid! || _selectedDate == null || getFoodsTic < 3) {
+    if (!isValid! || _selectedDate == null) {
+      return;
+    }
+    if (checkInitFood() == false) {
+      // 3.5 Hệ thống kiểm tra danh sách món ăn ban đầu có lớn hơn 1 hay không || 4.5 Hệ thống kiểm tra danh sách món ăn ban đầu có lớn hơn 1 hay không
+      ScaffoldMessenger.of(context).showSnackBar(
+        // 3.5.1 Hệ thống hiển thị lỗi danh sách món ăn ban đầu phải chọn ít nhất 1 món || 4.5.1 Hệ thống hiển thị lỗi danh sách món ăn ban đầu phải chọn ít nhất 1 món
+        const SnackBar(
+          content: Text(
+            'Init foods more than 1 or equal 1',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.redAccent),
+          ),
+        ),
+      );
       return;
     }
     _form.currentState?.save();
@@ -116,10 +138,12 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
       _isLoading = true;
     });
     if (_editSchedule.id != '') {
+      // 4.6 gọi hàm updateSchedule trong scheduleController để thực hiện cập nhật lịch
       await scheduleController.updateSchedule(
           context, _editSchedule.id.toString(), _editSchedule);
     } else {
       try {
+        // 3.6 Gọi hàm createSchedule trong controller để thực hiện tạo lịch
         await scheduleController.createSchedule(context, _editSchedule);
       } catch (error) {
         await showDialog<void>(
@@ -143,6 +167,17 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
       _isLoading = false;
     });
     Navigator.of(context).pop();
+    // 3.7 Hiển thị trang chi tiết lịch vừa tạo || 4.7 Hiển thị trang chi tiết lịch vừa cập nhật
+    showScheduleDetailScreen();
+  }
+
+  void showScheduleDetailScreen() {
+    Navigator.of(context).pushNamed(
+      ScheduleDetailScreen.routeName,
+      arguments: _editSchedule.id != ''
+          ? _editSchedule.id
+          : Provider.of<ScheduleData>(context, listen: false).schedules.last.id,
+    );
   }
 
   void _presentDatePicker() {
@@ -192,6 +227,7 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
             )
           : Padding(
               padding: const EdgeInsets.all(16.0),
+              // 3.2 Điền thông tin của lịch ăn uống || 4.2 Thay đổi thông tin muốn được cập nhật
               child: Form(
                 key: _form,
                 child: ListView(
@@ -201,10 +237,14 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
                       decoration: InputDecoration(labelText: 'Titile'),
                       textInputAction: TextInputAction.next,
                       validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please provide a value.';
+                        // 3.4 Kiểm tra xem tên đã tồn tại hay chưa || 4.4 Kiểm tra xem tên mới đã tồn tại hay chưa
+                        if (scheduleController.checkScheduleName(
+                                context, value) &&
+                            value != _editSchedule.title) {
+                          // 3.4.1.1 Kết quả kiểm tra là tên đã tồn tại || 4.4.1.1 Kết quả kiểm tra là tên đã tồn tại
+                          return 'Schedule name is exist'; // 3.4.1.1.1 Hiển thị lỗi: tên lịch đã tồn tại || 4.4.1.1.1 Hiển thị lỗi: tên lịch đã tồn tại
                         }
-                        return null;
+                        return null; //3.4.1.2 Kết quả kiểm tra tên hợp lệ || 4.4.1.2 kết quả kiểm tra tên hợp lệ
                       },
                       onSaved: (value) {
                         _editSchedule = Schedule(
@@ -266,6 +306,7 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
                       height: 20,
                     ),
                     TextButton(
+                      // 3.3 Nhấn nút create để tạo lịch khi chọn chức năng tạo lịch || 4.3 Nhấn nút update để cập nhật lịch khi chọn chức năng chỉnh sửa lịch
                       onPressed: _saveForm,
                       child: Text(
                         _editSchedule.id != null ? 'Update' : 'Create',
