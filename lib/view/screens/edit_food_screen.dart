@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:suggest_food_app/model/food.dart';
+import 'package:suggest_food_app/model/recipe.dart';
 import 'package:suggest_food_app/provider/food_data.dart';
 import 'package:suggest_food_app/view/widget/food_item.dart';
 
@@ -14,41 +15,29 @@ class EditFoodScreen extends StatefulWidget {
 
 class _EditFoodScreenState extends State<EditFoodScreen> {
   final _form = GlobalKey<FormState>();
-  late String _name;
-  late String _description;
-  late double _rate;
-  late String _category;
-  late String _urlImage;
-  Map<String, bool> foodsItem = {};
+  String _name = '';
+  String _description = '';
+  String _category = '';
+  String _urlImage = '';
+  double _rate = 0;
+  Recipe _recipe = Recipe(ingredients: [], steps: []);
+  // Create Text Editing Controllers for each input field
+  final nameController = TextEditingController();
+  final descriptionController = TextEditingController();
+  final categoryController = TextEditingController();
+  final urlImageController = TextEditingController();
+  final rateController = TextEditingController();
+  @override
+  void dispose() {
+    // Clean up the controllers when the Widget is removed from the Widget tree
+    nameController.dispose();
+    descriptionController.dispose();
+    categoryController.dispose();
+    urlImageController.dispose();
+    rateController.dispose();
+    super.dispose();
+  }
 
-  Map<String, bool> fillMapFoods(List<Food> foodsChoose) {
-    final foods = Provider.of<FoodData>(context, listen: false).foodFavorites;
-    for (var food in foods) {
-      foodsItem.putIfAbsent(food.id!, () => containFood(foodsChoose, food));
-    }
-    return foodsItem;
-  }
-  List<String> get getIdFoodsChoose {
-    List<String> result = [];
-    foodsItem.forEach((key, value) {
-      if (value) result.add(key);
-    });
-
-    return result;
-  }
-  bool containFood(List<Food> foodsContain, Food food) {
-    for (var f in foodsContain) {
-      if (f.id == food.id) {
-        return true;
-      }
-    }
-    for (var id in getIdFoodsChoose) {
-      if (id == food.id) {
-        return true;
-      }
-    }
-    return false;
-  }
   var _initValues = {
     'id': '',
     'name': '',
@@ -71,16 +60,9 @@ class _EditFoodScreenState extends State<EditFoodScreen> {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    final foods = Provider.of<FoodData>(context, listen: false).foodFavorites;
-    final List<Food> foodsChoose =
-        (_initValues['foods'] as List<dynamic>).isNotEmpty
-            ? _initValues['foods'] as List<Food>
-            : [];
-    fillMapFoods(foodsChoose);
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-            _editFood.id != null ? 'Edit Food' : 'Create food'),
+        title: Text(_editFood.id != null ? 'Edit Food' : 'Create food'),
       ),
       body: _isLoading
           ? const Center(
@@ -93,8 +75,8 @@ class _EditFoodScreenState extends State<EditFoodScreen> {
                 child: ListView(
                   children: [
                     TextFormField(
-                      initialValue: _initValues['title'].toString(),
-                      decoration: InputDecoration(labelText: 'Titlele'),
+                      initialValue: _initValues['name'].toString(),
+                      decoration: InputDecoration(labelText: 'Name'),
                       textInputAction: TextInputAction.next,
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -109,59 +91,68 @@ class _EditFoodScreenState extends State<EditFoodScreen> {
                           description: _editFood.description,
                           category: _editFood.category,
                           urlImage: _editFood.urlImage,
-                          
                         );
                       },
                     ),
-                    // Container(
-                    //   height: 70,
-                    //   child: Row(
-                    //     children: [
-                    //       Expanded(
-                    //         child: Text(_selectedDate == null
-                    //             ? 'No date chosen!'
-                    //             : 'Picked Date: ${DateFormat.yMd().format(_selectedDate!)}'),
-                    //       ),
-                    //       TextButton(
-                    //         onPressed: _presentDatePicker,
-                    //         child: Text('Choose Date'),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-                    Container(
-                      height: deviceSize.height - 70 - 16 * 2 - 20 - 200,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white.withOpacity(0.9),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.4),
-                            offset: const Offset(0, 2),
-                            blurRadius: 4.0,
-                          ),
-                        ],
-                      ),
-                      child: ListView.builder(
-                        itemBuilder: (context, index) => FoodItem(
-                          // updateStatusItem: setStatusFoods,
-                          id: foods[index].id,
-                          category: foods[index].category,
-                          name: foods[index].name,
-                          rate: foods[index].rate,
-                          urlImage: foods[index].urlImage,
-                          isChoose: containFood(foodsChoose, foods[index])
-                              ? true
-                              : false, 
-                          updateStatusItem: (String , bool ) {  },
-                        ),
-                        itemCount: foods.length,
-                      ),
+                    TextFormField(
+                      initialValue: _initValues['category'].toString(),
+                      decoration: InputDecoration(labelText: 'Category'),
+                      textInputAction: TextInputAction.next,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please provide a value.';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        _editFood = Food(
+                          id: _editFood.id,
+                          name: _editFood.name,
+                          description: _editFood.description,
+                          category: value,
+                          urlImage: _editFood.urlImage,
+                        );
+                      },
                     ),
-                    const SizedBox(
-                      height: 20,
+                    TextFormField(
+                      initialValue: _initValues['description'].toString(),
+                      decoration: InputDecoration(labelText: 'Description'),
+                      textInputAction: TextInputAction.next,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please provide a value.';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        _editFood = Food(
+                          id: _editFood.id,
+                          name: _editFood.name,
+                          description: value,
+                          category: _editFood.category,
+                          urlImage: _editFood.urlImage,
+                        );
+                      },
+                    ),
+                    TextFormField(
+                      initialValue: _initValues['urlImage'].toString(),
+                      decoration: InputDecoration(labelText: 'urlImage'),
+                      textInputAction: TextInputAction.next,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please provide a value.';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        _editFood = Food(
+                          id: _editFood.id,
+                          name: _editFood.name,
+                          description: _editFood.urlImage,
+                          category: _editFood.category,
+                          urlImage: value,
+                        );
+                      },
                     ),
                     TextButton(
                       onPressed: _saveForm,
@@ -181,6 +172,5 @@ class _EditFoodScreenState extends State<EditFoodScreen> {
     );
   }
 
-  void _saveForm() {}
-  }
+  Future<void> _saveForm() async {}
 }
