@@ -8,6 +8,7 @@ import 'package:suggest_food_app/view/screens/edit_schedule_screen.dart';
 import 'package:suggest_food_app/view/screens/home_screen.dart';
 import 'package:suggest_food_app/view/screens/auth_screen.dart';
 import 'package:suggest_food_app/view/screens/manage_schedule_screen.dart';
+import 'package:suggest_food_app/view/screens/schedule_detail_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -46,6 +47,7 @@ class MyApp extends StatelessWidget {
             HomeScreen.routeName: (context) => HomeScreen(),
             ManageScheduleScreen.routeName: (context) => ManageScheduleScreen(),
             EditScheduleScreen.routeName: (context) => EditScheduleScreen(),
+            ScheduleDetailScreen.routeName: (context) => ScheduleDetailScreen(),
           },
         ),
       ),

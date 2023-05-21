@@ -8,6 +8,11 @@ import '../../provider/auth.dart';
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
 
+  // 2. Gọi hàm chuyến hướng sang trang ManageScheduleScreen
+  void showManageScheduleScreen(BuildContext context) {
+    Navigator.of(context).pushReplacementNamed(ManageScheduleScreen.routeName);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -47,10 +52,9 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.edit),
             title: const Text('Manage Schedules'),
-            onTap: () {
-              Navigator.of(context)
-                  .pushReplacementNamed(ManageScheduleScreen.routeName);
-            },
+            // 1. Nhấn nút ManageSchedule để chuyển hướng đến màn hình ManageScheduleScreen
+            onTap: () => showManageScheduleScreen(
+                context), // 2. Gọi hàm chuyến hướng sang trang ManageScheduleScreen
           ),
           const Divider(),
           ListTile(

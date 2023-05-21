@@ -4,6 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'dart:convert';
 
+import '../util/constants.dart';
+
 class Auth with ChangeNotifier {
   String? _token;
   DateTime? _expiryDate;
@@ -53,6 +55,7 @@ class Auth with ChangeNotifier {
         ),
       );
       _autoLogout();
+      if (urlSegment == 'accounts:signUp') saveUser(email, password);
       notifyListeners();
     } catch (error) {
       throw error;
@@ -84,5 +87,21 @@ class Auth with ChangeNotifier {
     }
     final timeToExpiry = _expiryDate!.difference(DateTime.now()).inSeconds;
     _authTimer = Timer(Duration(seconds: timeToExpiry), logout);
+  }
+
+  Future<void> saveUser(String email, String password) async {
+    final url =
+        'https://suggest-food-app-default-rtdb.firebaseio.com/users.json?auth=$_token';
+    try {
+      await http.post(
+        Uri.parse(url),
+        body: json.encode({
+          'email': email,
+          'password': password,
+        }),
+      );
+    } catch (error) {
+      rethrow;
+    }
   }
 }

@@ -125,6 +125,10 @@ class FoodData with ChangeNotifier {
     return [..._foodFavorite];
   }
 
+  Food getFoodById(String id) {
+    return _foodFavorite.firstWhere((food) => food.id == id);
+  }
+
   List<Food> getFoodsByIds(List<String> ids) {
     List<Food> result = [];
     ids.forEach((id) {

@@ -54,9 +54,14 @@ class ScheduleData with ChangeNotifier {
     return [..._schedules];
   }
 
+  bool scheduleNameIsExist(name) {
+    for (var schedule in schedules) {
+      if (schedule.title == name) return true;
+    }
+    return false;
+  }
+
   Future<void> fetchAndSetSchedule() async {
-    // var url =
-    //     'https://suggest-food-app-default-rtdb.firebaseio.com/schedules/$userId.json?auth=$authToken';
     var url = '$apiSchedules$userId.json?auth=$authToken';
     try {
       final response = await http.get(Uri.parse(url));
