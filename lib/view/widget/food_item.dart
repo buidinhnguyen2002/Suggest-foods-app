@@ -25,34 +25,34 @@ class FoodItem extends StatefulWidget {
 class _FoodItemState extends State<FoodItem> {
   @override
   Widget build(BuildContext context) {
-    // return CheckboxListTile(
-    //   value: widget.isChoose,
-    //   onChanged: (value) {
-    //     setState(() {
-    //       widget.isChoose = !widget.isChoose;
-    //     });
-    //     widget.updateStatusItem(widget.id!, widget.isChoose);
-    //   },
-    //   activeColor: Theme.of(context).primaryColor,
-    //   checkColor: Theme.of(context).accentColor,
-    //   controlAffinity: ListTileControlAffinity.leading,
-    //   title: Text(
-    //     widget.name ?? "",
-    //     style: const TextStyle(
-    //       fontWeight: FontWeight.w500,
-    //       fontSize: 18,
-    //     ),
-    //   ),
-    //   subtitle: Text(widget.category!),
-    //   contentPadding: const EdgeInsets.all(0),
-    //   tristate: true,
-    //   secondary: Image.network(widget.urlImage!),
-    // );
-    return Row(children: [
+    return CheckboxListTile(
+      value: widget.isChoose,
+      onChanged: (value) {
+        setState(() {
+          widget.isChoose = !widget.isChoose;
+        });
+        widget.updateStatusItem(widget.id!, widget.isChoose);
+      },
+      activeColor: Theme.of(context).primaryColor,
+      checkColor: Theme.of(context).accentColor,
+      controlAffinity: ListTileControlAffinity.leading,
+      title: Text(
+        widget.name ?? "",
+        style: const TextStyle(
+          fontWeight: FontWeight.w500,
+          fontSize: 18,
+        ),
+      ),
+      subtitle: Text(widget.category!),
+      contentPadding: const EdgeInsets.all(0),
+      tristate: true,
+      secondary: Image.network(widget.urlImage!),
+    );
+    // return Row(children: [
         
-        ListTile(leading: IconButton(icon: Icon(Icons.favorite_outline), onPressed: (){
+    //     ListTile(leading: IconButton(icon: Icon(Icons.favorite_outline), onPressed: (){
 
-        },),),
-    ],);
+    //     },),),
+    // ],);
   }
 }

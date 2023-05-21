@@ -400,4 +400,8 @@ class FoodData with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Food findById(String id) {
+    return _food.firstWhere((food) => food.id == id);
+  }
 }

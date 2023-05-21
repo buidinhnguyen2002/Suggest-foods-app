@@ -63,8 +63,7 @@ class ManageFoodScreen extends StatelessWidget {
                               itemBuilder: (context, index) => FoodItem(
                                 id: foodData.fid,
                                 name: foodData.food[index].name,
-                                category: foodData.
-                                food[index].category,
+                                category: foodData.food[index].category,
                                 urlImage: foodData.food[index].urlImage,
                                 isChoose: foodData.food[index].isChoose as bool,
                                 updateStatusItem: (id, isChoose) {
@@ -90,35 +89,22 @@ class ManageFoodScreen extends StatelessWidget {
                             height: deviceSize.height,
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 10),
-                            // child: ListView.builder(
-                            //   itemBuilder: (context, index) {
-                            //     final foodItem = foodData.food[index];
-                            //     if (foodItem.favorite == true) {
-                            //       return FoodItem(
-                            //         id: foodItem.id,
-                            //         name: foodItem.name,
-                            //         category: foodItem.category,
-                            //         urlImage: foodItem.urlImage,
-                            //         isChoose: foodItem.isChoose as bool,
-                            //         updateStatusItem: (id, isChoose) {
-                            //           foodData.updateStatus(id, isChoose);
-                            //         },
-                            //       );
-                            //     }
-                            //   },
-                            //   itemCount: foodData.food.length,
-                            // ),
                             child: ListView.builder(
-                              itemBuilder: (context, index) => FoodItem(
-                                id: foodData.fid,
-                                name: foodData.food[index].name,
-                                category: foodData.food[index].category,
-                                urlImage: foodData.food[index].urlImage,
-                                isChoose: foodData.food[index].isChoose as bool,
-                                updateStatusItem: (id, isChoose) {
-                                  foodData.updateStatus(id, isChoose);
-                                },
-                              ),
+                              itemBuilder: (context, index) {
+                                final foodItem = foodData.food[index];
+                                if (foodItem.favorite == true) {
+                                  return FoodItem(
+                                    id: foodItem.id,
+                                    name: foodItem.name,
+                                    category: foodItem.category,
+                                    urlImage: foodItem.urlImage,
+                                    isChoose: foodItem.isChoose as bool,
+                                    updateStatusItem: (id, isChoose) {
+                                      foodData.updateStatus(id, isChoose);
+                                    },
+                                  );
+                                }
+                              },
                               itemCount: foodData.food.length,
                             ),
                           ),

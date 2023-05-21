@@ -4,6 +4,7 @@ import 'package:suggest_food_app/controller/food_controller.dart';
 import 'package:suggest_food_app/model/food.dart';
 import 'package:suggest_food_app/model/recipe.dart';
 import 'package:suggest_food_app/provider/food_data.dart';
+import 'package:suggest_food_app/view/screens/food_detail_screen.dart';
 import 'package:suggest_food_app/view/widget/food_item.dart';
 
 class EditFoodScreen extends StatefulWidget {
@@ -210,5 +211,17 @@ class _EditFoodScreenState extends State<EditFoodScreen> {
       _isLoading = false;
     });
     Navigator.of(context).pop();
+    // 3.1.6 Hiển thị trang Quản lý món ăn mới tạo món ăn mới
+    // 3.2.6 Hiển thị trang Quản lý món ăn được cập nhật
+    showFoodDetailScreen();
+  }
+  
+  void showFoodDetailScreen() {
+    Navigator.of(context).pushNamed(
+      FoodDetailScreen.routeName,
+      arguments: _editFood.id != ''
+          ? _editFood.id
+          : Provider.of<FoodData>(context, listen: false).food.last.id,
+    );
   }
 }
