@@ -300,7 +300,7 @@ class FoodData with ChangeNotifier {
       notifyListeners();
     } catch (e) {}
   }
-
+  //3.1.5 ham tao mon an
   Future<void> addFood(Food food) async {
     final url = '$apiFoods$userId.json?auth=$authToken';
     try {
@@ -344,7 +344,7 @@ class FoodData with ChangeNotifier {
       rethrow;
     }
   }
-
+  //3.2.5 ham cap nhat mon an
   Future<void> updateFood(String id, Food newFood) async {
     final foodIndex = _food.indexWhere((food) => food.id == id);
     if (foodIndex > -1) {
@@ -375,7 +375,7 @@ class FoodData with ChangeNotifier {
       notifyListeners();
     }
   }
-
+  // 3.3.2 ham xoa mon an
   Future<void> deleteFood(String id) async {
     final url = '$apiFoods$userId/$id.json?auth=$authToken';
     final existingFoodIndex = _food.indexWhere((food) => food.id == id);
@@ -390,10 +390,8 @@ class FoodData with ChangeNotifier {
     }
   }
 
-  Future<void> updateStatus(String? id, bool isChoose) async {
-
-  }
-  void updateFavoriteStatus(String id, bool newFavoriteStatus) {
+  //3.4.1 cap nhat trang thai yeu thich
+  Future<void> updateFavoriteStatus(String id, bool newFavoriteStatus) async {
     final foodIndex = _food.indexWhere((food) => food.id == id);
     if (foodIndex >= 0) {
       _food[foodIndex].favorite = newFavoriteStatus;
@@ -403,5 +401,12 @@ class FoodData with ChangeNotifier {
 
   Food findById(String id) {
     return _food.firstWhere((food) => food.id == id);
+  }
+  // 3.1.4.1 kiem tra ten tao mon an moi da ton tai chua || 3.2.4.1 kiem tra ten cap nhat moi ton tai chua
+  bool foodNameIsExist(name) {
+    for (var f in food) {
+      if (f.name == name) return true;
+    }
+    return false;
   }
 }
