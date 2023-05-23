@@ -35,7 +35,7 @@ class FoodData with ChangeNotifier {
       name: 'Cá chép',
       category: 'Món chính',
       description: 'fwefewf',
-      rate: 5.0,
+      rate: 4.5,
       urlImage:
           'https://cdn.tgdd.vn/Files/2020/11/30/1310363/tong-hop-cac-mon-an-tu-ca-chep-bo-tui-de-nau-ca-thang-khong-bao-gio-ngan-202201071820154823.jpg',
       recipe: Recipe(ingredients: [
@@ -54,7 +54,7 @@ class FoodData with ChangeNotifier {
       name: 'Cá chép',
       category: 'Món chính',
       description: 'fwefewf',
-      rate: 5.0,
+      rate: 4.0,
       urlImage:
           'https://cdn.tgdd.vn/Files/2020/11/30/1310363/tong-hop-cac-mon-an-tu-ca-chep-bo-tui-de-nau-ca-thang-khong-bao-gio-ngan-202201071820154823.jpg',
       recipe: Recipe(ingredients: [
@@ -73,7 +73,7 @@ class FoodData with ChangeNotifier {
       name: 'Cá chép',
       category: 'Món chính',
       description: 'fwefewf',
-      rate: 5.0,
+      rate: 3.5,
       urlImage:
           'https://cdn.tgdd.vn/Files/2020/11/30/1310363/tong-hop-cac-mon-an-tu-ca-chep-bo-tui-de-nau-ca-thang-khong-bao-gio-ngan-202201071820154823.jpg',
       recipe: Recipe(ingredients: [
@@ -92,7 +92,7 @@ class FoodData with ChangeNotifier {
       name: 'Cá chép',
       category: 'Món chính',
       description: 'fwefewf',
-      rate: 5.0,
+      rate: 3.0,
       urlImage:
           'https://cdn.tgdd.vn/Files/2020/11/30/1310363/tong-hop-cac-mon-an-tu-ca-chep-bo-tui-de-nau-ca-thang-khong-bao-gio-ngan-202201071820154823.jpg',
       recipe: Recipe(ingredients: [
@@ -111,7 +111,7 @@ class FoodData with ChangeNotifier {
       name: 'Cá chép',
       category: 'Món chính',
       description: 'fwefewf',
-      rate: 5.0,
+      rate: 2.5,
       urlImage:
           'https://cdn.tgdd.vn/Files/2020/11/30/1310363/tong-hop-cac-mon-an-tu-ca-chep-bo-tui-de-nau-ca-thang-khong-bao-gio-ngan-202201071820154823.jpg',
       recipe: Recipe(ingredients: [
