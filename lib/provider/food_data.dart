@@ -300,7 +300,7 @@ class FoodData with ChangeNotifier {
       notifyListeners();
     } catch (e) {}
   }
-
+  //3.1.5 ham tao mon an
   Future<void> addFood(Food food) async {
     final url = '$apiFoods$userId.json?auth=$authToken';
     try {
@@ -344,7 +344,7 @@ class FoodData with ChangeNotifier {
       rethrow;
     }
   }
-
+  //3.2.5 ham cap nhat mon an
   Future<void> updateFood(String id, Food newFood) async {
     final foodIndex = _food.indexWhere((food) => food.id == id);
     if (foodIndex > -1) {
