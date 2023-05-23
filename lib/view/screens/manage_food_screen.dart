@@ -103,6 +103,8 @@ class ManageFoodScreen extends StatelessWidget {
                                       foodData.updateStatus(id, isChoose);
                                     },
                                   );
+                                } else {
+                                  return Container();
                                 }
                               },
                               itemCount: foodData.food.length,
