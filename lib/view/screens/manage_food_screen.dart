@@ -28,8 +28,10 @@ class ManageFoodScreen extends StatelessWidget {
           actions: [
             IconButton(
               onPressed: () {
+                //3.1.1 Hien thi form tao mon an
                 Navigator.of(context).pushNamed(EditFoodScreen.routeName);
               },
+              // 3.1 Nut tao mon an moi
               icon: const Icon(Icons.add),
             ),
             const SizedBox(
@@ -67,7 +69,7 @@ class ManageFoodScreen extends StatelessWidget {
                                 urlImage: foodData.food[index].urlImage,
                                 isChoose: foodData.food[index].isChoose as bool,
                                 updateStatusItem: (id, isChoose) {
-                                  foodData.updateStatus(id, isChoose);
+                                  foodData.updateFavoriteStatus(id, isChoose);
                                 },
                               ),
                               itemCount: foodData.food.length,
@@ -100,11 +102,9 @@ class ManageFoodScreen extends StatelessWidget {
                                     urlImage: foodItem.urlImage,
                                     isChoose: foodItem.isChoose as bool,
                                     updateStatusItem: (id, isChoose) {
-                                      foodData.updateStatus(id, isChoose);
+                                      foodData.updateFavoriteStatus(id, isChoose);
                                     },
                                   );
-                                } else {
-                                  return Container();
                                 }
                               },
                               itemCount: foodData.food.length,

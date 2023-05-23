@@ -45,9 +45,11 @@ class AppDrawer extends StatelessWidget {
           ),
           const Divider(),
           ListTile(
+            // 1. Hien thi chuc nang Quan ly mon an
             leading: const Icon(Icons.fastfood),
             title: const Text('Manage foods'),
             onTap: () {
+              // 2. Chuyen huong sang trang chuc nang Manage Food
               Navigator.of(context).pushReplacementNamed(ManageFoodScreen.routeName);
             },
           ),
