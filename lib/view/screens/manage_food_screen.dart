@@ -79,38 +79,40 @@ class ManageFoodScreen extends StatelessWidget {
             ),
             FutureBuilder(
               future: _refreshFoods(context),
-              builder: (context, snapshot) =>
-                  snapshot.connectionState == ConnectionState.waiting
-                      ? const Center(
-                          child: CircularProgressIndicator(),
-                        )
-                      : Consumer<FoodData>(
-                          builder: (context, foodData, child) => Container(
-                            color: Colors.white,
-                            width: deviceSize.width,
-                            height: deviceSize.height,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 10),
-                            child: ListView.builder(
-                              itemBuilder: (context, index) {
-                                final foodItem = foodData.food[index];
-                                if (foodItem.favorite == true) {
-                                  return FoodItem(
-                                    id: foodItem.id,
-                                    name: foodItem.name,
-                                    category: foodItem.category,
-                                    urlImage: foodItem.urlImage,
-                                    isChoose: foodItem.isChoose as bool,
-                                    updateStatusItem: (id, isChoose) {
-                                      foodData.updateFavoriteStatus(id, isChoose);
-                                    },
-                                  );
-                                }
-                              },
-                              itemCount: foodData.food.length,
-                            ),
-                          ),
+              builder: (context, snapshot) => snapshot.connectionState ==
+                      ConnectionState.waiting
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : Consumer<FoodData>(
+                      builder: (context, foodData, child) => Container(
+                        color: Colors.white,
+                        width: deviceSize.width,
+                        height: deviceSize.height,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        child: ListView.builder(
+                          itemBuilder: (context, index) {
+                            final foodItem = foodData.food[index];
+                            if (foodItem.favorite == true) {
+                              return FoodItem(
+                                id: foodItem.id,
+                                name: foodItem.name,
+                                category: foodItem.category,
+                                urlImage: foodItem.urlImage,
+                                isChoose: foodItem.isChoose as bool,
+                                updateStatusItem: (id, isChoose) {
+                                  foodData.updateFavoriteStatus(id, isChoose);
+                                },
+                              );
+                            } else {
+                              return Container();
+                            }
+                          },
+                          itemCount: foodData.food.length,
                         ),
+                      ),
+                    ),
             ),
           ],
         ),
