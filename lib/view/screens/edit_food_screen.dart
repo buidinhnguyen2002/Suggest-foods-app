@@ -45,6 +45,57 @@ class _EditFoodScreenState extends State<EditFoodScreen> {
   );
   var _isLoading = false;
 
+  Future<void> _saveForm() async {
+    final isValid = _form.currentState?.validate();
+    if (!isValid!) {
+      return;
+    }
+    setFinalEditedFood();
+    setState(() {
+      _isLoading = true;
+    });
+    if (_editFood.id != '') {
+      await foodController.updateFood(
+          context, _editFood.id.toString(), _editFood);
+    } else {
+      try {
+        await foodController.createFood(context, _editFood);
+      } catch (error) {
+        await showDialog<void>(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: const Text('An error occurred'),
+            content: const Text('Something went wrong.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(ctx).pop();
+                },
+                child: Text('Okay'),
+              ),
+            ],
+          ),
+        );
+      }
+    }
+    setState(() {
+      _isLoading = false;
+    });
+    Navigator.of(context).pop();
+    // 3.1.6 Hiển thị trang Quản lý món ăn mới tạo món ăn mới
+    // 3.2.6 Hiển thị trang Quản lý món ăn được cập nhật
+    showFoodDetailScreen();
+  }
+  
+  void showFoodDetailScreen() {
+    Navigator.of(context).pushNamed(
+      FoodDetailScreen.routeName,
+      arguments: _editFood.id != ''
+          ? _editFood.id
+          : Provider.of<FoodData>(context, listen: false).food.last.id,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
@@ -69,6 +120,11 @@ class _EditFoodScreenState extends State<EditFoodScreen> {
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Please provide a value.';
+                        }
+                        // 3.1.4 Kiem tra ten da ton tai || 3.2.4 Kiem tra ten moi cap nhat da ton tai
+                        if (Provider.of<FoodData>(context, listen: false).foodNameIsExist(value)) {
+                          // 3.1.4.1.2 Tra ve da ton tai ten || 3.2.4.1.2 Tra ve ten moi cap nhat da ton tai
+                          return 'Food name is exist';
                         }
                         return null;
                       },
@@ -174,54 +230,4 @@ class _EditFoodScreenState extends State<EditFoodScreen> {
     );
   }
 
-  Future<void> _saveForm() async {
-    final isValid = _form.currentState?.validate();
-    if (!isValid!) {
-      return;
-    }
-    setFinalEditedFood();
-    setState(() {
-      _isLoading = true;
-    });
-    if (_editFood.id != '') {
-      await foodController.updateFood(
-          context, _editFood.id.toString(), _editFood);
-    } else {
-      try {
-        await foodController.createFood(context, _editFood);
-      } catch (error) {
-        await showDialog<void>(
-          context: context,
-          builder: (ctx) => AlertDialog(
-            title: const Text('An error occurred'),
-            content: const Text('Something went wrong.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(ctx).pop();
-                },
-                child: Text('Okay'),
-              ),
-            ],
-          ),
-        );
-      }
-    }
-    setState(() {
-      _isLoading = false;
-    });
-    Navigator.of(context).pop();
-    // 3.1.6 Hiển thị trang Quản lý món ăn mới tạo món ăn mới
-    // 3.2.6 Hiển thị trang Quản lý món ăn được cập nhật
-    showFoodDetailScreen();
-  }
-  
-  void showFoodDetailScreen() {
-    Navigator.of(context).pushNamed(
-      FoodDetailScreen.routeName,
-      arguments: _editFood.id != ''
-          ? _editFood.id
-          : Provider.of<FoodData>(context, listen: false).food.last.id,
-    );
-  }
 }
