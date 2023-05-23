@@ -32,6 +32,7 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
   }
 
   int get getFoodsTic {
+    count = 0;
     foodsItem.forEach((key, value) {
       if (value) count++;
     });
@@ -118,6 +119,7 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
     if (!isValid! || _selectedDate == null) {
       return;
     }
+    // print(checkInitFood());
     if (checkInitFood() == false) {
       // 3.5 Hệ thống kiểm tra danh sách món ăn ban đầu có lớn hơn 1 hay không || 4.5 Hệ thống kiểm tra danh sách món ăn ban đầu có lớn hơn 1 hay không
       ScaffoldMessenger.of(context).showSnackBar(
@@ -215,6 +217,7 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
         (_initValues['foods'] as List<dynamic>).isNotEmpty
             ? _initValues['foods'] as List<Food>
             : [];
+    print(foodsChoose);
     fillMapFoods(foodsChoose);
     return Scaffold(
       appBar: AppBar(
