@@ -70,6 +70,11 @@ class _EditFoodScreenState extends State<EditFoodScreen> {
                         if (value!.isEmpty) {
                           return 'Please provide a value.';
                         }
+                        // 3.1.4 Kiem tra ten da ton tai || 3.2.4 Kiem tra ten moi cap nhat da ton tai
+                        if (Provider.of<FoodData>(context, listen: false).foodNameIsExist(value)) {
+                          // 3.1.4.1.2 Tra ve da ton tai ten || 3.2.4.1.2 Tra ve ten moi cap nhat da ton tai
+                          return 'Food name is exist';
+                        }
                         return null;
                       },
                       onSaved: (value) {

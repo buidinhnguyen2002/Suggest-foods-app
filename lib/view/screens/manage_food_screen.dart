@@ -67,7 +67,7 @@ class ManageFoodScreen extends StatelessWidget {
                                 urlImage: foodData.food[index].urlImage,
                                 isChoose: foodData.food[index].isChoose as bool,
                                 updateStatusItem: (id, isChoose) {
-                                  foodData.updateStatus(id, isChoose);
+                                  foodData.updateFavoriteStatus(id, isChoose);
                                 },
                               ),
                               itemCount: foodData.food.length,
@@ -100,7 +100,7 @@ class ManageFoodScreen extends StatelessWidget {
                                     urlImage: foodItem.urlImage,
                                     isChoose: foodItem.isChoose as bool,
                                     updateStatusItem: (id, isChoose) {
-                                      foodData.updateStatus(id, isChoose);
+                                      foodData.updateFavoriteStatus(id, isChoose);
                                     },
                                   );
                                 }
